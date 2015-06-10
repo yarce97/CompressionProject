@@ -124,6 +124,7 @@ public class Huffman
       
     /**
      * writeEncodedFile
+     * @author  Yazel Arce
      * @param bytes bytes for file
      * @param fileName file input
      */ 
@@ -135,6 +136,7 @@ public class Huffman
    
     /**
      * writeKeyFile
+     * @author  Carmelita DeLeon
      * @param fileName the name of the file to write to
      */
     public void writeKeyFile(String fileName)
