@@ -16,7 +16,11 @@ public class HuffmanTree<T extends Comparable<? super T>>
     private final T MARKER = null;
     SortedMap<T, String> codeMap;
     SortedMap<String, T> keyMap;
-    
+    BinaryNode node = new BinaryNode();
+    BinaryNode node2 = new BinaryNode();
+    BinaryTree biTree;
+    int valueTemp = 0;
+    int value = 0;
     private int leafCount = 0;
     
     /**
@@ -77,8 +81,82 @@ public class HuffmanTree<T extends Comparable<? super T>>
      */
      private void add(HuffmanData<T> element1)
      {
-
-       
+         Queue<HuffmanData<T>> element = new LinkedList<>();
+         BinaryNode tempBi = new BinaryNode();
+         element.add(element1);
+         T mark = (T) element.peek();
+         valueTemp += element.element().getOccurances();         
+         if (node.getData() == null)
+         {
+             tempMark = (T) element.peek();  
+             HuffmanData<T> temp = new HuffmanData<T>(MARKER, 
+                     element1.getOccurances());
+             node.setData(temp);
+             tempBi.setData(tempMark);
+             node.setLeftChild(tempBi);
+         }
+         else if (node.getData() != null)
+         {
+             if (node.hasLeftChild() && !node.hasRightChild())
+             {
+                 if (tempMark.compareTo(mark) >= 0)
+                 {
+                     tempBi.setData(mark);
+                     HuffmanData temp2 = new HuffmanData(MARKER, valueTemp);
+                     node.setData(temp2);
+                     node.setRightChild(node.getLeftChild());
+                     node.setLeftChild(tempBi);
+                 }
+                 else if (tempMark.compareTo(mark) < 0)
+                 {
+                     tempBi.setData(mark);
+                     HuffmanData temp2 = new HuffmanData(MARKER, valueTemp);
+                     node.setData(temp2);
+                     node.setRightChild(tempBi);   
+                 }
+             }
+             else if (node.hasLeftChild() && node.hasRightChild())
+             {
+                 value += element1.getOccurances();
+                 if (node2.getData() == null)
+                 {
+                     tempMark = (T) element.peek();
+                     HuffmanData<T> temp = new HuffmanData<T>(MARKER, 
+                             value);
+                     node2.setData(temp);
+                     tempBi.setData(mark);
+                     node2.setLeftChild(tempBi);
+                 }
+                 else if (node2.getData() != null)
+                 {
+                     if (node2.hasLeftChild() && !node2.hasRightChild())
+                     {
+                         if (tempMark.compareTo(mark) >= 0)
+                         {
+                             tempBi.setData(mark);
+                             HuffmanData temp2 = new HuffmanData(MARKER, value);
+                             node2.setData(temp2);
+                             node2.setRightChild(node2.getLeftChild());
+                             node2.setLeftChild(tempBi);
+                         }
+                         else if (tempMark.compareTo(mark) < 0)
+                         {
+                             tempBi.setData(mark);
+                             HuffmanData temp2 = new HuffmanData(MARKER, value);
+                             node2.setData(temp2);
+                             node2.setRightChild(tempBi);   
+                         }
+                     }    
+                     else
+                     {
+                         HuffmanTree huff = new HuffmanTree();
+                         huff.add(node, node2); 
+                     }
+                 }
+             }
+         }              
+         element.remove();
+         leafCount++;
      }
     
      /** 
