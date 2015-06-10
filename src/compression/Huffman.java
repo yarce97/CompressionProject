@@ -110,14 +110,23 @@ public class Huffman
             System.exit(0);
         }
         catch(IOException e)
-        {
-            
+        {   
         }
         addCharAndCount();
-        addHuffArray(sortedMap);
+        //Iterate through the map and add to array list
+        Iterator iterateKey = sortedMap.keySet().iterator();
+        Iterator iterateValues = sortedMap.values().iterator();
+        while(iterateKey.hasNext() && iterateValues.hasNext())
+        {
+            char key = (char) iterateKey.next();
+            int value = (int) iterateValues.next();
+            charCount = new HuffmanChar(key, value);
+            charCountArray.add(charCount);
+        }
+        sortedMap.clear();
 //        theTree = new HuffmanTree(charCountArray);
-        writeEncodedFile(byteArray, fileName);
-        writeKeyFile(fileName);
+//        writeEncodedFile(byteArray, fileName);
+//        writeKeyFile(fileName);
     } 
  
     /*
@@ -133,11 +142,10 @@ public class Huffman
                     (new FileReader(inFileName));
             while((text = readMe.readLine()) != null)
             {
-                String sentence = text + "\n";
-                readChar = sentence.toCharArray();
-                for(int i = 0; i < readChar.length; i++)
+                saveDataArray = text.getBytes();
+                for(int i = 0; i < saveDataArray.length; i++)
                 {
-                    char c = readChar[i];
+                    byte c = saveDataArray[i];
                     countChars((byte)c);
                 }
             }   
@@ -148,8 +156,9 @@ public class Huffman
         }
         catch(IOException e)
         {
-            
         }
+        addCharAndCount();
+//        theTree = new HuffmanTree(charCountArray);
     }
       
     /**
@@ -233,14 +242,29 @@ public class Huffman
      */
     private void countChars(byte character)
     {
-        for(int i = 0; i < byteArray.length; i++)
+        if(byteArray.length > 0)
         {
-            if(i == character)
+            for(int i = 0; i < byteArray.length; i++)
             {
-               byteArray[i] += 1; 
-               break;
-            }
+                if(i == character)
+                {
+                   byteArray[i] += 1; 
+                   break;
+                }
+            } 
         }
+        else if(saveDataArray.length > 0)
+        {
+            for(int i = 0; i < saveDataArray.length; i++)
+            {
+                if(i == character)
+                {
+                   saveDataArray[i] += 1; 
+                   break;
+                }
+            } 
+        }
+        
     }
     /**
      * adds the Characters and occurences into a map then sorts that map and
@@ -297,21 +321,5 @@ public class Huffman
         } 
         return sortedMap;
     }  
-    /**
-     * adds the map keys and values to the arrayList
-     * @param map the sorted map
-     */
-    private void addHuffArray(Map map)
-    {
-        Iterator iterateKey = map.keySet().iterator();
-        Iterator iterateValues = map.values().iterator();
-        while(iterateKey.hasNext() && iterateValues.hasNext())
-        {
-            char key = (char) iterateKey.next();
-            int value = (int) iterateValues.next();
-            charCount = new HuffmanChar(key, value);
-            charCountArray.add(charCount);
-        }
-        map.clear();       
-    }
 }
+
