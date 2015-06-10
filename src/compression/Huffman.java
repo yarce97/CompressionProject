@@ -10,7 +10,7 @@ import java.lang.*;
 import java.io.*;
 /**
  *
- * @author JCY
+ * @author Jin Chang
  */
 public class Huffman
 {  
