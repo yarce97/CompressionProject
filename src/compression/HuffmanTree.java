@@ -8,7 +8,7 @@ package compression;
 import java.util.*;
 /**
  * binary tree for Huffman coding
- * @author pbladek
+ * @author Moe, Yazel Arce, Carmelita DeLeon
  */
 public class HuffmanTree<T extends Comparable<? super T>>
         extends BinaryTree<HuffmanData<T>>
@@ -34,6 +34,7 @@ public class HuffmanTree<T extends Comparable<? super T>>
     /**
      * Creates a new instance of HuffmanTree
     * from an array of Huffman Data
+     * @author Moe
      * @param dataArray n array of Huffman Data
      */
     public HuffmanTree(HuffmanData<T>[] dataArray) 
@@ -47,6 +48,7 @@ public class HuffmanTree<T extends Comparable<? super T>>
     
     /** 
      * creates two new HuffmanTrees and adds them to the root of this tree
+     * 
      * @param left 
      * @param rightt
      */
@@ -65,6 +67,7 @@ public class HuffmanTree<T extends Comparable<? super T>>
     /** 
      * adds 2 new elements to this tree<br>
      *  smaller on the left
+     * @author Carmelita DeLeon
      * @param element1
      * @param element2
      */
@@ -77,6 +80,7 @@ public class HuffmanTree<T extends Comparable<? super T>>
    /** 
      * add a single element to the tree
      *  smaller on the left
+     * @author Yazel Arce
      * @param element1
      */
      private void add(HuffmanData<T> element1)
