@@ -102,7 +102,8 @@ public class Huffman
                     char c = readChar[i];
                     countChars((byte)c);
                 }
-            }   
+            }
+            readChar = null;
         }
         catch(FileNotFoundException e)
         {
@@ -114,7 +115,6 @@ public class Huffman
         }
         addCharAndCount();
         addHuffArray(sortedMap);
-        
 //        theTree = new HuffmanTree(charCountArray);
         writeEncodedFile(byteArray, fileName);
         writeKeyFile(fileName);
@@ -161,6 +161,7 @@ public class Huffman
     public void writeEncodedFile(byte[] bytes, String fileName)
             
     {
+        //write first file(array byte)
         writeKeyFile(fileName);
         try
         {
@@ -176,6 +177,8 @@ public class Huffman
         {
             e.printStackTrace();
         }
+        //write second file
+        writeSecondFile(fileName);
     }
    
     /**
@@ -200,6 +203,29 @@ public class Huffman
         int extensionIndex = editFileName.lastIndexOf(".");
         file = editFileName.substring(0, extensionIndex);
         file += ".huf";
+    }
+    /**
+     * writeSecondFile
+     * @param fileName the name of the file to write to
+     */
+    public void writeSecondFile(String fileName)
+    {
+        String separate = File.separator;
+        String editFileName;
+        // Remove the path upto the filename.
+        int lastSeparatorIndex = fileName.lastIndexOf(separate);
+        if (lastSeparatorIndex == -1) 
+        {
+            editFileName = fileName;
+        } 
+        else 
+        {
+            editFileName = fileName.substring(lastSeparatorIndex + 1);
+        }
+        // Remove the extension.
+        int extensionIndex = editFileName.lastIndexOf(".");
+        file = editFileName.substring(0, extensionIndex);
+        file += ".cod";
     }
     /**
      * count the number characters
@@ -232,7 +258,9 @@ public class Huffman
                 mapCharCount.put(key,count);
             }
         }
+        byteArray = null;
         sortedMap.putAll(sortMap(mapCharCount));
+        mapCharCount.clear();
     }
     /**
      * Sorts the Map from lowest to highest and returns the sorted map.
@@ -284,5 +312,6 @@ public class Huffman
             charCount = new HuffmanChar(key, value);
             charCountArray.add(charCount);
         }
+        map.clear();       
     }
 }
