@@ -14,7 +14,7 @@ public class HuffmanTree<T extends Comparable<? super T>>
         extends BinaryTree<HuffmanData<T>>
 {
     private final T MARKER = null;
-    private final tempMark = null;
+    private final T tempMark = null;
     SortedMap<T, String> codeMap;
     SortedMap<String, T> keyMap;
     BinaryNode node = new BinaryNode();
