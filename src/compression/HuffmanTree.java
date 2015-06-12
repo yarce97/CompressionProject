@@ -6,22 +6,23 @@
 
 package compression;
 import java.util.*;
+import javafx.scene.Node;
 /**
  * binary tree for Huffman coding
- * @author Moe, Yazel Arce, Carmelita DeLeon
+ * @author pbladek
+ * @param <T>
  */
 public class HuffmanTree<T extends Comparable<? super T>>
         extends BinaryTree<HuffmanData<T>>
 {
-    private final T MARKER = null;
-    private final T tempMark = null;
+    private T MARKER = null;
+    private T tempMark = null;
     SortedMap<T, String> codeMap;
     SortedMap<String, T> keyMap;
     BinaryNode node = new BinaryNode();
     BinaryNode node2 = new BinaryNode();
     BinaryTree biTree;
     int valueTemp = 0;
-    int value = 0;
     private int leafCount = 0;
     
     /**
@@ -34,50 +35,48 @@ public class HuffmanTree<T extends Comparable<? super T>>
    
     /**
      * Creates a new instance of HuffmanTree
-    * from an array of Huffman Data
-     * @author Moe
+     * from an array of Huffman Data
      * @param dataArray n array of Huffman Data
      */
     public HuffmanTree(HuffmanData<T>[] dataArray) 
-   {
+    {
         // your code here
-       
-         keyMap = new TreeMap<String, T>();
-         codeMap = new TreeMap<T, String>();
-         setMaps(getRootNode(), "");
+
+
+
+//        
+//         keyMap = new TreeMap<String, T>();
+//         codeMap = new TreeMap<T, String>();
+//         setMaps(getRootNode(), "");
     }
     
     /** 
      * creates two new HuffmanTrees and adds them to the root of this tree
-     * 
-     * @param left 
-     * @param rightt
+     * @param huffTree
      */
-    private void add(BinaryNode<HuffmanData<T>> left,
-            BinaryNode<HuffmanData<T>> right)
+      public void add(TreeSet <HuffTree> huffTree)
     {
-         HuffmanTree<T> leftTree = new HuffmanTree<T>();
-         leftTree.setRootNode(left); 
-         HuffmanTree<T> rightTree = new HuffmanTree<T>();
-         rightTree.setRootNode(right);
-         setTree(new HuffmanData<T>
-                 (MARKER, left.getData().getOccurances()
-                 + right.getData().getOccurances()), leftTree, rightTree);
+        HuffTree left = huffTree.first();
+        huffTree.remove(left);
+        HuffTree right = huffTree.first();
+        huffTree.remove(right);
+        HuffNode tempNode = new HuffNode(left.getFrequency() 
+                + right.getFrequency(),left,right);
+        huffTree.add(tempNode);
     }
-    
      /** 
       * set up the 2 maps
       * @param node
       * @param codeString
-     */
+      */
      private void setMaps(BinaryNodeInterface<HuffmanData<T>> node,
              String codeString)
      { 
        
               
      }
-  
-      /*
+    
+    /*
      * accessor for codeMap
      * @ return codeMap
      */
@@ -94,5 +93,4 @@ public class HuffmanTree<T extends Comparable<? super T>>
     {
         return keyMap;
     }
-
 }
