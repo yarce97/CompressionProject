@@ -7,8 +7,10 @@
 package compression;
 
 
-import java.util.*;
 import java.io.*;
+import java.util.*;
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 
 /**
  *
@@ -19,18 +21,20 @@ public class Huffman
     public static final int CHARMAX = 128;
     public static final byte CHARBITS = 7;
     public static final short CHARBITMAX = 128;
-    //private HuffmanTree<Character> theTree;
+  //  private HuffmanTree<Character> theTree;
     private HuffmanChar charCount;
     private HuffmanData data;
     private byte[] byteArray;
-    private String file;
+    private String hufFile;
+    private String codFile;
+    private int compression;
+    private File File;
     private Map mapCharCount;
     private Map sortedMap;
-    private SortedMap<Character, String> keyMap;
-    private SortedMap<String, Character> codeMap;
     protected ArrayList<HuffmanChar> charCountArray;
     char[] readChar; 
     byte[] saveDataArray;
+    private File file;
     
     
     /**
@@ -41,7 +45,7 @@ public class Huffman
         byteArray = new byte[CHARBITMAX];
         mapCharCount = new HashMap<>();
         sortedMap = new LinkedHashMap<>();
-        charCountArray = new ArrayList<HuffmanChar>();
+        charCountArray = new ArrayList<>();
     }
     
     /**
@@ -62,25 +66,46 @@ public class Huffman
 //        args[0] = "-d";
 //        args[1] = "alice.txt";  
 //----------------------------------------------------        
-        boolean decode = true;
+        boolean decode = false;
+        boolean fileFound = false;
         String textFileName = "";
+        Huffman coder = new Huffman();
         if(args.length > 0)
         {
             if(args[0].substring(0,2).toLowerCase().equals("-d"))
             {
                 decode = true;
                 if(args.length > 1)
+                {   
                     textFileName = args[1];
+                }
+                else
+                {
+                    textFileName = JOptionPane.showInputDialog("Please enter "
+                            + "the file you wish to compress: ");
+                    coder.isFileFound(textFileName);
+                    if(fileFound)
+                    {
+                       textFileName = args[1]; 
+                    }
+                    else
+                    {
+                        textFileName = JOptionPane.showInputDialog("Please "
+                                + "enter the file you wish to compress: ");
+                    }
+                }
             }
             else
                 textFileName = args[0];
         }
-        Huffman coder = new Huffman();
         if(decode)
-            coder.encode(textFileName);
-        else
             coder.decode(textFileName);
-    }
+        else
+            coder.encode(textFileName);
+            JOptionPane.showMessageDialog(null,
+                     coder.hufFile + ":" + coder.compression + "% compression", 
+                     "File Information", INFORMATION_MESSAGE, null);
+    } 
 
     /*
      * encode
@@ -103,6 +128,7 @@ public class Huffman
                     countChars((byte)c);
                 }
             }
+            readMe.close();
             readChar = null;
         }
         catch(FileNotFoundException e)
@@ -149,6 +175,7 @@ public class Huffman
                     countChars((byte)c);
                 }
             }   
+            readMe.close();
         }
         catch(FileNotFoundException e)
         {
@@ -158,7 +185,29 @@ public class Huffman
         {
         }
         addCharAndCount();
-//        theTree = new HuffmanTree(charCountArray);
+        charCount = new HuffmanChar(byteArray);
+        charCountArray.add(charCount);
+        byteArray = null;
+    //    theTree = new HuffmanTree(charCountArray);
+        //open .huf file
+        try
+        {
+            writeKeyFile(inFileName);
+            BufferedReader readMe = new BufferedReader
+                    (new FileReader(hufFile));
+            while((text = readMe.readLine()) != null)
+            {
+                readChar = text.toCharArray();
+            }
+            readMe.close();
+        }
+        catch(FileNotFoundException e)
+        {
+            System.exit(0);
+        }
+        catch(IOException e)
+        {
+        }
     }
       
     /**
@@ -168,7 +217,6 @@ public class Huffman
      * @throws FileNotFoundException if file cannot be found
      */ 
     public void writeEncodedFile(byte[] bytes, String fileName)
-            
     {
         //write first file(array byte)
         writeKeyFile(fileName);
@@ -192,7 +240,7 @@ public class Huffman
    
     /**
      * writeKeyFile
-     * @param fileName the name of the file to write to
+     * @param fileName the name of the file with extension .huf to write to
      */
     public void writeKeyFile(String fileName)
     {
@@ -210,12 +258,12 @@ public class Huffman
         }
         // Remove the extension.
         int extensionIndex = editFileName.lastIndexOf(".");
-        file = editFileName.substring(0, extensionIndex);
-        file += ".huf";
+        hufFile = editFileName.substring(0, extensionIndex);
+        hufFile += ".huf";
     }
     /**
      * writeSecondFile
-     * @param fileName the name of the file to write to
+     * @param fileName the name of the file with extension .cod to write to
      */
     public void writeSecondFile(String fileName)
     {
@@ -233,8 +281,8 @@ public class Huffman
         }
         // Remove the extension.
         int extensionIndex = editFileName.lastIndexOf(".");
-        file = editFileName.substring(0, extensionIndex);
-        file += ".cod";
+        codFile = editFileName.substring(0, extensionIndex);
+        codFile += ".cod";
     }
     /**
      * count the number characters
@@ -253,18 +301,6 @@ public class Huffman
                 }
             } 
         }
-        else if(saveDataArray.length > 0)
-        {
-            for(int i = 0; i < saveDataArray.length; i++)
-            {
-                if(i == character)
-                {
-                   saveDataArray[i] += 1; 
-                   break;
-                }
-            } 
-        }
-        
     }
     /**
      * adds the Characters and occurences into a map then sorts that map and
@@ -321,5 +357,19 @@ public class Huffman
         } 
         return sortedMap;
     }  
+    /**
+     * finds whether the file exists or can be read
+     * @param file the file name
+     * @return true if the file is found or false if not found
+     */
+    private boolean isFileFound(String file)
+    {
+        boolean found = false;
+        File fileIn = new File(file);
+        if(fileIn.canRead() || fileIn.exists())
+        {
+            found = true;
+        }
+        return found;
+    }
 }
-
