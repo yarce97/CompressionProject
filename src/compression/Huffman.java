@@ -137,31 +137,61 @@ public class Huffman
      * @param inFileName the file to decode
      */   
     public void decode(String inFileName)
-    { 
-        String text = "";
+    {      String text ="";
         try
         {
-            BufferedReader readMe = new BufferedReader
-                    (new FileReader(inFileName));
-            while((text = readMe.readLine()) != null)
+            File file = new File(inFileName);
+            Path path = Paths.get(file.getAbsolutePath()); 
+            byte[] data = Files.readAllBytes(path); 
+            
+            BufferedReader readMe = new BufferedReader(new FileReader(inFileName));
+            while ((text = readMe.readLine()) != null)
             {
-                String sentence = text + "\n";
-                readChar = sentence.toCharArray();
-                for(int i = 0; i < readChar.length; i++)
+                File file2 = new File(inFileName)
                 {
-                    char c = readChar[i];
-                    countChars((byte)c);
+                    Path path = Paths.get(file.getAbsolutePath()); 
+                    byte[] data2 = Files.readAllBytes(path); 
                 }
-            }   
+                        
+            }
+            
+            for (int i = 0; i < data.length; i++)
+            {
+                HuffmanTree theHuff = new HuffmanTree();
+                
+                theHuff.add();
+            }
+     //
         }
-        catch(FileNotFoundException e)
-        {
-            System.exit(0);
-        }
-        catch(IOException e)
+        catch (IOException e)
         {
             
         }
+        
+//        String text = "";
+//        try
+//        {
+//            BufferedReader readMe = new BufferedReader
+//                    (new FileReader(inFileName));
+//            while((text = readMe.readLine()) != null)
+//            {
+//                String sentence = text + "\n";
+//                readChar = sentence.toCharArray();
+//                for(int i = 0; i < readChar.length; i++)
+//                {
+//                    char c = readChar[i];
+//                    countChars((byte)c);
+//                }
+//            }   
+//        }
+//        catch(FileNotFoundException e)
+//        {
+//            System.exit(0);
+//        }
+//        catch(IOException e)
+//        {
+//            
+//        }
     }
       
     /**
